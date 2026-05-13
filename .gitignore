@@ -1,0 +1,6 @@
+.env
+uptime-kuma-data/
+*.tar.gz
+*.zip
+backups/
+.DS_Store

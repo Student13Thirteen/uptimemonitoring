@@ -1,21 +1,93 @@
-# 🐻 Uptime Kuma - Homelab Monitoring
+# UptimeMonitoring — Homelab Service Monitoring
 
-![Uptime Kuma](https://img.shields.io/badge/Uptime_Kuma-1.x-brightgreen?style=for-the-badge&logo=uptime-kuma)
-![Docker](https://img.shields.io/badge/Docker-Ready-blue?style=for-the-badge&logo=docker)
-![Cloudflare](https://img.shields.io/badge/Cloudflare-Zero_Trust-orange?style=for-the-badge&logo=cloudflare)
+Central monitoring setup for self-hosted services using **Uptime Kuma**, Docker and Telegram alerts.  
+The goal is to monitor internal services such as Nextcloud and PocketBase and receive fast notifications when something goes down or recovers.
 
-This repository contains the documentation and setup instructions for the central monitoring system of my homelab. 
-The system is built on **[Uptime Kuma](https://github.com/louislam/uptime-kuma)**, providing real-time uptime tracking and instant Telegram alerts for all my self-hosted services (like Nextcloud and PocketBase).
+> Portfolio focus: service reliability, monitoring, alerting, incident awareness and operational runbook thinking.
 
-## 🌟 Features
-- **24/7 Monitoring**: Checks the health of internal Docker containers every 5 minutes.
-- **Telegram Alerts**: Instant push notifications to a smartphone when a service goes down or recovers.
-- **Secure Remote Access**: Exposed to the web securely via a Cloudflare Zero Trust Tunnel without opening any router ports.
-- **Bypass SSL Issues**: Uses TCP Port monitoring to check container health natively, avoiding internal SSL/HTTPS redirect loops.
+## What this project demonstrates
 
-## 📚 Documentation
-Check out the complete step-by-step setup guide here:
-👉 **[Setup & Configuration Guide](setup_uptimekuma.md)**
+- Docker-based monitoring deployment
+- Service health checks for self-hosted infrastructure
+- Telegram alerting for downtime/recovery events
+- Cloudflare Tunnel access without router port forwarding
+- Operational documentation and troubleshooting workflows
 
----
-*Part of my Homelab Infrastructure.*
+## Architecture
+
+```text
+Uptime Kuma container
+   │
+   ├── TCP/HTTP checks → Nextcloud, PocketBase, internal services
+   │
+   ├── Telegram notifications → phone / operations chat
+   │
+   └── Cloudflare Tunnel → secure remote dashboard access
+```
+
+## Repository structure
+
+```text
+uptimemonitoring/
+├── cloudflared/
+│   └── config.yml.example
+├── docs/
+│   ├── architecture.md
+│   ├── deployment.md
+│   ├── monitor-catalog.md
+│   ├── runbook.md
+│   ├── troubleshooting.md
+│   └── screenshots/
+├── .env.example
+├── docker-compose.yml
+├── LICENSE
+└── README.md
+```
+
+## Quick start
+
+```bash
+git clone https://github.com/Student13Thirteen/uptimemonitoring.git
+cd uptimemonitoring
+cp .env.example .env
+nano .env
+docker compose up -d
+```
+
+Open locally:
+
+```text
+http://localhost:3001
+```
+
+Then create the first admin user and configure Telegram notifications.
+
+## Documentation
+
+| Document | Purpose |
+|---|---|
+| [`docs/architecture.md`](docs/architecture.md) | Monitoring architecture and alert flow |
+| [`docs/deployment.md`](docs/deployment.md) | Step-by-step deployment |
+| [`docs/monitor-catalog.md`](docs/monitor-catalog.md) | Suggested monitors for your services |
+| [`docs/runbook.md`](docs/runbook.md) | Operational checks and incident handling |
+| [`docs/troubleshooting.md`](docs/troubleshooting.md) | Common issues and fixes |
+
+## Useful commands
+
+```bash
+# Check containers
+docker compose ps
+
+# View logs
+docker compose logs -f
+
+# Restart Uptime Kuma
+docker compose restart uptime-kuma
+
+# Stop stack
+docker compose down
+```
+
+## License
+
+MIT — see [`LICENSE`](LICENSE).

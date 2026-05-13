@@ -1,0 +1,27 @@
+services:
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    container_name: uptime-kuma
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3001:3001"
+    volumes:
+      - ./uptime-kuma-data:/app/data
+    networks:
+      - monitoring-net
+
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared-monitoring
+    restart: unless-stopped
+    depends_on:
+      - uptime-kuma
+    volumes:
+      - ./cloudflared:/etc/cloudflared:ro
+    command: tunnel --config /etc/cloudflared/config.yml run --token ${CLOUDFLARE_TOKEN}
+    networks:
+      - monitoring-net
+
+networks:
+  monitoring-net:
+    driver: bridge
